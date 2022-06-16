@@ -33,8 +33,9 @@ class HillClimbingAlgorith:
             total_weight+=temp_weight
             if not self.uphill(total_weight):break 
             best_fit.append(best_item)
+        print("\nThe Optimal solution for knapsack problems according to Hill Climbing algorithm is as follows: \n")
         for item,weight,value in best_fit:
-            print(item,end="=>")
+            print(item)
 items=[("A",10,30),("B",40,30),("C",40,10),("D",10,25),("E",5,18)]
 instance=HillClimbingAlgorith(50,items)
 instance.candidate_evaluator()
