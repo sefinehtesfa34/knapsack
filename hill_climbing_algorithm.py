@@ -1,3 +1,29 @@
+import random
+import os
+file_path = 'data.txt'
+max_weight = random.randint(30,100)
+if os.stat(file_path).st_size == 0:
+    with open('data.txt', 'a') as f:
+        f.write(str(max_weight) + "\n")
+        f.write("name, " + "weight, " + "value" + "\n")
+
+    #Random graph generator
+    def generateProduct(size):
+        for i in range(size):
+            weight = random.randint(1,25)
+            value = random.randint(5,30)
+            element1 = random.randint(65,90)
+            element2 = random.randint(97,122)
+            element3 = random.randint(97,122)
+            element4 = random.randint(97,122)
+            element5 = random.randint(97,122)
+            element6 = random.randint(97,122)
+            arr = [chr(element1), chr(element2), chr(element3), chr(element4), chr(element5), chr(element6)]
+            name = "".join(arr)
+            with open('data.txt', 'a') as f:
+                f.write(name + "," + str(weight) + "," + str(value) + "\n" )
+    generateProduct(20)
+
 class HillClimbingAlgorith:
     def __init__(self,max_weight,items):
         self.max_weight=max_weight
