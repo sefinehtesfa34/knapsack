@@ -65,8 +65,15 @@ class HillClimbingAlgorith:
             if not self.uphill(total_weight):break 
             best_fit.append(best_item)
         print("\nThe Optimal solution for knapsack problems according to Hill Climbing algorithm is as follows: \n")
+        total_weight=0
+        total_value=0
         for item,weight,value in best_fit:
+            total_weight+=weight 
+            total_value+=value 
             print(item)
+        print("The total weight for the above items is : ",total_weight)
+        print("The optimal value for the above items is: ",total_value)
+        
 items=[]
 with open("data.txt","r") as text_file:
     line_reader=text_file.readlines()
