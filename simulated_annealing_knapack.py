@@ -83,15 +83,21 @@ def slove(): #iterative function
             g = 1.0*(temp-current)/temperature
             if(random.random() <math.exp(g)): #Probability to accept inferior solutions
                 copy_the_current_arry_to_another_array(current_solution,test,number_of_items);    
-                
-#*****************************Main function ******************** ****        
 init()
-isGood = 0
+isGood = False 
 for i in range(time):      
     slove()
-    temperature = temperature*annealing_rate; #temperature drop
+    temperature = temperature*annealing_rate #temperature drop
     if(best==295):  
-        print('Find the optimal solution: 295, the number of iterations', i+1); isGood = 1; break; #reach the optimal solution and exit early
+        print('Find the optimal solution: 295, the number of iterations', i+1) 
+        isGood = True 
+        break; #reach the optimal solution and exit early
         
-if(isGood == 0): print('Only found the sub-optimal solution:',best,'number of iterations',time)
+if(isGood == False): print('Only found the sub-optimal solution:',best,'number of iterations',time)
 print('The scheme is:',best_solution); #Print scheme
+val=0
+weigh=0
+for index in best_solution:
+    weigh+=weight[index]
+    val+=value[index]
+print(weigh,val,max_capacity)
