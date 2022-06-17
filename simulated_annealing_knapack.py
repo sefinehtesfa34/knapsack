@@ -94,12 +94,11 @@ for i in range(time):
         break #reach the optimal solution and exit early
         
 if(isGood == False): 
-    print('Only found the sub-optimal solution:',best,'number of iterations',time)
-print('The scheme is:',best_solution) #Print scheme
+    print(best)
+print('The selected items are :',list(map(bool,best_solution))) #Print scheme
 val=0
 weigh=0
 for index,is_selected in enumerate(best_solution):
-    
     if is_selected:
         weigh+=weight[index]
         val+=value[index]
