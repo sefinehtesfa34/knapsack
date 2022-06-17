@@ -8,6 +8,7 @@ class NodeGenerator:
         self.height = height
         self.nodesNumber = nodesNumber
 
+
     def generate(self):
         xs = np.random.randint(self.width, size=self.nodesNumber)
         ys = np.random.randint(self.height, size=self.nodesNumber)
