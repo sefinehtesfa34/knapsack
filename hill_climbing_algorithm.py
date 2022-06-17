@@ -1,9 +1,6 @@
 import random
 import os
 file_path = 'data.txt'
-max_weight = random.randint(30,100)
-
-#Random graph generator
 def generateProduct(size):
     with open('data.txt', 'a') as f:
         f.write(str(max_weight) + "\n")
@@ -74,22 +71,32 @@ class HillClimbingAlgorith:
         print("The total weight for the above items is : ",total_weight)
         print("The optimal value for the above items is: ",total_value)
         
-items=[]
-with open("data.txt","r") as text_file:
-    line_reader=text_file.readlines()
-    for line in line_reader:
-        line_list=line.strip().split(",")
-        try:
-            item=line_list[0]
-            weight=int(line_list[1])
-            value=int(line_list[2])
-            items.append((line_list[0],weight,value))
-        except:
-            continue
-instance=HillClimbingAlgorith(50,items)
-instance.candidate_evaluator()
+def file_reader(size):
+    items=[]
+    with open("data.txt","r") as text_file:
+        line_reader=text_file.readlines()
+        counter=0
+        max_weight=int(line_reader[0])
         
-    
+        for line in line_reader:
+            line_list=line.strip().split(",")
+            try:
+                item=line_list[0]
+                weight=int(line_list[1])
+                value=int(line_list[2])
+                items.append((line_list[0],weight,value))
+                if counter==size:
+                    return max_weight,items
+                counter+=1
+            except:
+                continue
+            
+    return max_weight,items
+max_weight=50
+size=int(input("Enter the items size below or equal to 20: \n"))
+max_weight,items=file_reader(size)
+instance=HillClimbingAlgorith(max_weight,items)
+instance.candidate_evaluator()
 
 
 
