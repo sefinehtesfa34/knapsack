@@ -22,7 +22,7 @@ def calculate_the_value(x): #calculate the value of the backpack
     sum_weights=0
     for index in range(number_of_items):
         sum_of_values += x[index]*value[index] 
-        sum_weights += x[index]*weight[index];    
+        sum_weights += x[index]*weight[index]    
     return sum_of_values
 def random_solution_geberator(): #Initially generate random solutions
     while True:
@@ -56,7 +56,7 @@ def put(x): #Randomly put items that do not exist in the backpack
 def slove(): #iterative function
     global best,temperature,balance
     test=[0]*number_of_items
-    current = 0; #Current backpack value
+    current = 0 #Current backpack value
     for _ in range(balance):
         current = calculate_the_value(current_solution)
         copy_the_current_arry_to_another_array(test,current_solution,number_of_items)
@@ -66,13 +66,13 @@ def slove(): #iterative function
             test[ob]=0 #Take it out in the backpack and add other items
         else: #If not in the backpack, directly add or replace the items in the backpack
             if(random.random()<0.5):
-                test[ob]=1; 
+                test[ob]=1 
             else: 
                 get(test)
                 test[ob]=1
         temp = calculate_the_value(test)
         if(sum_weights>max_capacity):
-            continue; # skip if illegal solution
+            continue # skip if illegal solution
         if(temp> best): 
             best=temp 
             copy_the_current_arry_to_another_array(best_solution,test,number_of_items) #Update the global best
@@ -82,7 +82,7 @@ def slove(): #iterative function
         else:
             g = 1.0*(temp-current)/temperature
             if(random.random() <math.exp(g)): #Probability to accept inferior solutions
-                copy_the_current_arry_to_another_array(current_solution,test,number_of_items);    
+                copy_the_current_arry_to_another_array(current_solution,test,number_of_items)    
 init()
 isGood = False 
 for i in range(time):      
@@ -91,10 +91,11 @@ for i in range(time):
     if(best==295):  
         print('Find the optimal solution: 295, the number of iterations', i+1) 
         isGood = True 
-        break; #reach the optimal solution and exit early
+        break #reach the optimal solution and exit early
         
-if(isGood == False): print('Only found the sub-optimal solution:',best,'number of iterations',time)
-print('The scheme is:',best_solution); #Print scheme
+if(isGood == False): 
+    print('Only found the sub-optimal solution:',best,'number of iterations',time)
+print('The scheme is:',best_solution) #Print scheme
 val=0
 weigh=0
 for index in best_solution:
