@@ -98,7 +98,9 @@ if(isGood == False):
 print('The scheme is:',best_solution) #Print scheme
 val=0
 weigh=0
-for index in best_solution:
-    weigh+=weight[index]
-    val+=value[index]
+for index,is_selected in enumerate(best_solution):
+    
+    if is_selected:
+        weigh+=weight[index]
+        val+=value[index]
 print(weigh,val,max_capacity)
