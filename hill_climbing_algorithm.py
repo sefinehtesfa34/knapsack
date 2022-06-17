@@ -2,7 +2,8 @@ import random
 import os
 file_path = 'data.txt'
 max_weight = random.randint(30,100)
-    #Random graph generator
+
+#Random graph generator
 def generateProduct(size):
     with open('data.txt', 'a') as f:
         f.write(str(max_weight) + "\n")
