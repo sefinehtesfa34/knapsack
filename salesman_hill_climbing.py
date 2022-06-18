@@ -1,11 +1,10 @@
-# https://www.annytab.com/hill-climbing-search-algorithm-in-python/
-
 import random
 import copy
-
+import matplotlib.pyplot as plt 
 import numpy as np
 from numpy.linalg import norm
 from math import radians,sin,cos,asin,sqrt
+from hill_climbing_helper import SalesmanHillClimbing
 def distance_finder(latitude_one, longitude_one, latitude_two, longitude_two):        
         latitude_one, \
         longitude_one, \
@@ -21,39 +20,6 @@ def distance_finder(latitude_one, longitude_one, latitude_two, longitude_two):
         distance= 2 * asin(sqrt(distance)) 
         distance_in_km = 6371* distance
         return distance_in_km
-
-class State:
-    def __init__(self, route, distance: int = 0):
-        self.route = route
-        self.distance = distance
-
-    def __eq__(self, other):
-        for i in range(len(self.route)):
-            if self.route[i] != other.route[i]:
-                return False
-        return True
-
-    def __lt__(self, other):
-        return self.distance < other.distance
-
-    def __repr__(self):
-        return "({0},{1})\n".format(self.route, self.distance)
-
-    def copy(self):
-        return State(self.route, self.distance)
-
-    def deepcopy(self):
-        return State(copy.deepcopy(self.route), copy.deepcopy(self.distance))
-
-    def update_distance(self, matrix, home):
-        self.distance = 0
-        from_index = home
-        for i in range(len(self.route)):
-            self.distance += matrix[from_index][self.route[i]]
-            from_index = self.route[i]
-        self.distance += matrix[from_index][home]
-
-
 class City:
     def __init__(self, index: int, distance: int):
         self.index = index
@@ -67,9 +33,9 @@ def get_random_solution(matrix=[], home=0, city_indexes=[], size=0):
     cities = city_indexes.copy()
     cities.pop(home)
     population = []
-    for i in range(size):
+    for _ in range(size):
         random.shuffle(cities)
-        state = State(cities[:])
+        state = SalesmanHillClimbing(cities[:])
         state.update_distance(matrix, home)
         population.append(state)
     population.sort()
@@ -127,8 +93,7 @@ def main():
                     if count==city_size:
                         break 
                     
-                print(len(cities_with_their_location))
-        print(cities_with_their_location)
+                
         cities_coordinates={}
         index_to_cities_lookup={}
         index=0
@@ -136,7 +101,6 @@ def main():
             cities_coordinates[index]=value
             index_to_cities_lookup[index]=key 
             index+=1
-        print(cities_coordinates)
         distance = []
         for _, target_coordinates in cities_coordinates.items():
             distances = []
@@ -173,6 +137,14 @@ def main():
             
             total_cost+=distance_finder(latitude_one,longitude_one,latitude_two,longitude_two)
         total_cost_list.append(total_cost)
-    print(total_cost_list)
+    left = [total_cost_list[0], total_cost_list[1], total_cost_list[2]]
+    height = [10, 15, 20]
+    tick_label = ['10 cities ', '15 cities ', '20 cities']
+    plt.bar(height, left,  tick_label = tick_label,
+            width = 0.8, color = ['red', 'green', 'yellow'])
+    plt.ylabel('optimal cost')
+    plt.xlabel("Number of cities")
+    plt.title("Salesman problem using hill climbing algorithm")    
+    plt.show()
 if __name__ == "__main__":
     main()
