@@ -6,7 +6,7 @@ import copy
 import numpy as np
 from numpy.linalg import norm
 from math import radians,sin,cos,asin,sqrt
-def distance_finder(self,latitude_one, longitude_one, latitude_two, longitude_two):        
+def distance_finder(latitude_one, longitude_one, latitude_two, longitude_two):        
         latitude_one, \
         longitude_one, \
         latitude_two, \
@@ -108,51 +108,71 @@ def get_euclidean_distance(p, q):
 
 
 def main():
-    cities_position={}
-    with open('graph.txt','r') as text_file:
-            connections=text_file.readlines()
-            count=0
-            for connection in connections:
-                connection=connection.strip().split(',')
-                latitude=float(connection[1].strip())
-                longitude=float(connection[2].strip())
-                city=connection[0].strip()
-                cities_position[city]=(latitude,longitude)
-    cities_coordinates={}
-    index_to_cities_lookup={}
-    index=0
-    for key,value in cities_position.items():
-        cities_coordinates[index]=value
-        index_to_cities_lookup[index]=key 
-        index+=1
-    print(cities_coordinates)
-    distance = []
-    for _, target_coordinates in cities_coordinates.items():
-        distances = []
-        for _, coordinates in cities_coordinates.copy().items():
-            distances.append(get_euclidean_distance(target_coordinates, coordinates))
-        distance.append(distances)
+    city_sizes=[10,15,20]
+    total_cost_list=[]
+    for city_size in city_sizes:    
+        cities_position={}
+        cities_with_their_location={}
+        with open('graph.txt','r') as text_file:
+                connections=text_file.readlines()
+                count=0
+                for connection in connections:
+                    connection=connection.strip().split(',')
+                    latitude=float(connection[1].strip())
+                    longitude=float(connection[2].strip())
+                    city=connection[0].strip()
+                    cities_position[city]=(latitude,longitude)
+                    cities_with_their_location[city]=(latitude,longitude)
+                    count+=1
+                    if count==city_size:
+                        break 
+                    
+                print(len(cities_with_their_location))
+        print(cities_with_their_location)
+        cities_coordinates={}
+        index_to_cities_lookup={}
+        index=0
+        for key,value in cities_position.items():
+            cities_coordinates[index]=value
+            index_to_cities_lookup[index]=key 
+            index+=1
+        print(cities_coordinates)
+        distance = []
+        for _, target_coordinates in cities_coordinates.items():
+            distances = []
+            for _, coordinates in cities_coordinates.copy().items():
+                distances.append(get_euclidean_distance(target_coordinates, coordinates))
+            distance.append(distances)
 
-    home = 0
-    max_iterations = 100000
-    cities = list(cities_coordinates.keys())
-    city_indexes = [index - 1 for index in cities]
-    best_solution=[]
-    state = get_random_solution(distance, home, city_indexes, 100)
-    state = hill_climbing(distance, home, state, max_iterations, 0.1)
-    print("-- Hill climbing solution --")
-    print(index_to_cities_lookup[cities[home]], end="")
-    best_solution.append(index_to_cities_lookup[cities[home]])
-    for i in range(0, len(state.route)):
-        city_index=cities[state.route[i]]
-        best_solution.append(index_to_cities_lookup[city_index])
-        print(" -> " + index_to_cities_lookup[city_index], end="")
+        home = 0
+        max_iterations = 100000
+        cities = list(cities_coordinates.keys())
+        city_indexes = [index - 1 for index in cities]
+        best_solution=[]
+        state = get_random_solution(distance, home, city_indexes, 100)
+        state = hill_climbing(distance, home, state, max_iterations, 0.1)
+        print("-- Hill climbing solution --")
+        print(index_to_cities_lookup[cities[home]], end="")
+        best_solution.append(index_to_cities_lookup[cities[home]])
+        for i in range(0, len(state.route)):
+            city_index=cities[state.route[i]]
+            best_solution.append(index_to_cities_lookup[city_index])
+            print(" -> " + index_to_cities_lookup[city_index], end="")
 
-    print(" -> " + str(cities[home]), end="")
-    print("\n\nTotal distance: {0} miles".format(state.distance))
-    print()
-    print(best_solution)
-
-
+        print(" -> " + str(cities[home]), end="")
+        print("\n\nTotal distance: {0} miles".format(state.distance))
+        print()
+        total_cost=0
+        for index in range(len(best_solution)):
+            city_one=best_solution[index-1]
+            city_two=best_solution[index]
+            latitude_one=cities_with_their_location[city_one][0]
+            longitude_one=cities_with_their_location[city_one][1]
+            latitude_two=cities_with_their_location[city_two][0]
+            longitude_two=cities_with_their_location[city_two][1]
+            
+            total_cost+=distance_finder(latitude_one,longitude_one,latitude_two,longitude_two)
+        total_cost_list.append(total_cost)
+    print(total_cost_list)
 if __name__ == "__main__":
     main()
