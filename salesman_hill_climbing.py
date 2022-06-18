@@ -27,8 +27,6 @@ class CityClass:
 
     def __lt__(self, other):
         return self.distance < other.distance
-
-
 def get_random_solution(matrix=[], home=0, city_indexes=[], size=0):
     cities = city_indexes.copy()
     cities.pop(home)
@@ -42,15 +40,15 @@ def get_random_solution(matrix=[], home=0, city_indexes=[], size=0):
     return population[0]
 
 
-def mutate(matrix,home,state,mutation_rate = 0.01):
+def mutate_the_solution(matrix,home,state,mutation_rate = 0.01):
     mutated_state = state.deepcopy()
-    for i in range(len(mutated_state.route)):
+    for index in range(len(mutated_state.route)):
         if random.random() < mutation_rate:
-            j = int(random.random() * len(state.route))
-            city_1 = mutated_state.route[i]
-            city_2 = mutated_state.route[j]
-            mutated_state.route[i] = city_2
-            mutated_state.route[j] = city_1
+            random_route = int(random.random() * len(state.route))
+            city_1 = mutated_state.route[index]
+            city_2 = mutated_state.route[random_route]
+            mutated_state.route[index] = city_2
+            mutated_state.route[random_route] = city_1
     mutated_state.update_distance(matrix, home)
     return mutated_state
 
@@ -59,7 +57,7 @@ def hill_climbing(matrix,home,initial_state,max_iterations,mutation_rate = 0.01)
     best_state = initial_state
     iterator = 0
     while True:
-        neighbor = mutate(matrix, home, best_state, mutation_rate)
+        neighbor = mutate_the_solution(matrix, home, best_state, mutation_rate)
         if neighbor.distance >= best_state.distance:
             iterator += 1
             if iterator > max_iterations:
@@ -67,9 +65,6 @@ def hill_climbing(matrix,home,initial_state,max_iterations,mutation_rate = 0.01)
         if neighbor.distance < best_state.distance:
             best_state = neighbor
     return best_state
-
-
-
 def main():
     city_sizes=[10,15,20]
     total_cost_list=[]
@@ -106,7 +101,7 @@ def main():
             distance.append(distances)
 
         home = 0
-        max_iterations = 100000
+        max_iterations = 10000
         cities = list(cities_coordinates.keys())
         city_indexes = [index - 1 for index in cities]
         best_solution=[]
