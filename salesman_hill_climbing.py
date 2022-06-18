@@ -20,7 +20,7 @@ def distance_finder(latitude_one, longitude_one, latitude_two, longitude_two):
         distance= 2 * asin(sqrt(distance)) 
         distance_in_km = 6371* distance
         return distance_in_km
-class City:
+class CityClass:
     def __init__(self, index: int, distance: int):
         self.index = index
         self.distance = distance
@@ -69,9 +69,6 @@ def hill_climbing(matrix,home,initial_state,max_iterations,mutation_rate = 0.01)
     return best_state
 
 
-def get_euclidean_distance(p, q):
-    return round(norm(np.array(p) - np.array(q)))
-
 
 def main():
     city_sizes=[10,15,20]
@@ -105,7 +102,7 @@ def main():
         for _, target_coordinates in cities_coordinates.items():
             distances = []
             for _, coordinates in cities_coordinates.copy().items():
-                distances.append(get_euclidean_distance(target_coordinates, coordinates))
+                distances.append(distance_finder(target_coordinates[0],target_coordinates[1], coordinates[0],coordinates[1]))
             distance.append(distances)
 
         home = 0
