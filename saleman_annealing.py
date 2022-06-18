@@ -1,4 +1,5 @@
 import numpy as np 
+position_city_lookup_table={}
 def Generate():
     cities = []
     with open('graph.txt','r') as text_file:
@@ -7,7 +8,8 @@ def Generate():
             connection=connection.strip().split(',')
             latitude=connection[1].strip()
             longitude=connection[2].strip()
-            cities.append([float(latitude),float(longitude)])
+            position_city_lookup_table[(float(latitude),float(longitude))]=connection[0].strip()
+            cities.append((float(latitude),float(longitude)))
     return cities
 def Initialize(count):
     solution = np.arange(count)
@@ -65,5 +67,6 @@ if __name__ == "__main__":
                 current_score = new_score
         temperature *= TEMPERATURE_DECAY
         infos = (temperature, current_score, best_score, worst_score)
-    print(current_solution)
-    
+    print("\nCities path")
+    for index in current_solution:
+        print(position_city_lookup_table[cities[index]],end="=>")
