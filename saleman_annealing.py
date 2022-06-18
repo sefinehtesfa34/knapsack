@@ -33,46 +33,12 @@ def Generate(width, height, count):
     return cities
 
 def Initialize(count):
-    solution=[]
-    new_graph=copy(graph)
-    cities=list(new_graph.keys())
-    visited=set()
-    while len(solution)<count:
-        sample=random.choice(cities)
-        print("Cities\n")
-        print(cities)
-        try:
-            connected_sample=random.choice(new_graph[sample])
-        except:
-            pass 
-        while not sample or sample in visited or not connected_sample:
-            sample=random.choice(new_graph[sample])
-            try:
-                connected_sample=random.choice(new_graph[sample])
-            except:
-                pass
-        solution.extend([sample,connected_sample[0]])
-        print(new_graph[sample])
-        
-        if not new_graph[sample]:
-            del new_graph[sample]
-            continue
-        new_graph[sample].remove(connected_sample)
-        visited.add(sample)
-    print("solution: \n",solution)
-        # print("solution where is?")
-    
-            
-    
-        
     solution = numpy.arange(count)
     numpy.random.shuffle(solution)
     return solution
 
 def Evaluate(cities, solution):
     distance = 0
-    print(cities)
-    print(solution)
     for i in range(len(cities)):
         index_a = solution[i]
         index_b = solution[i - 1]
