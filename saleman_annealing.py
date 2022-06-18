@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 class SalesmanSimulatedAnnealing:
     def __init__(self) -> None:
         self.position_city_lookup_table={}
-    def distance_finder(self,latitude_one, longitude_one, latitude_two, longitude_two):
-        
+    def distance_finder(self,latitude_one, longitude_one, latitude_two, longitude_two):        
         latitude_one, \
         longitude_one, \
         latitude_two, \
@@ -19,7 +18,6 @@ class SalesmanSimulatedAnnealing:
             * sin(longitude_difference/2)**2
         distance= 2 * asin(sqrt(distance)) 
         distance_in_km = 6371* distance
-        
         return distance_in_km
     def generate(self,city_size):
         cities = []
@@ -35,8 +33,6 @@ class SalesmanSimulatedAnnealing:
                 count+=1
                 if count==city_size:
                     return cities
-                
-                
         return cities
     def initialize(self,count):
         solution = np.arange(count)
@@ -104,8 +100,7 @@ if __name__ == "__main__":
                     current_score = new_score
             temperature *= TEMPERATURE_DECAY
             infos = (temperature, current_score, best_score, worst_score)
-        solution=[]
-        
+        solution=[]        
         cost=0
         for index_i,index in enumerate(current_solution):
             solution.append((instance.position_city_lookup_table[cities[index]]))
@@ -125,9 +120,10 @@ if __name__ == "__main__":
         index+=1
     left = [total_cost[0], total_cost[1], total_cost[2]]
     height = [10, 15, 20]
-    tick_label = ['10 data and optimal cost '+ str(total_cost[0]), '15 and optimal cost '+str(total_cost[1]), '20 and optimal cost'+str(total_cost[2])]
+    tick_label = ['10 cities ', '15 cities ', '20 cities']
     plt.bar(height, left,  tick_label = tick_label,
             width = 0.8, color = ['red', 'green', 'yellow'])
-    plt.xlabel(('red = ' + str(10)+ ' item selected, ' + 'green = '+ str(15)+ ' item selected, '+ 'yellow = '+ str(20) + ' item selected'))
-    plt.ylabel('optimal cost')    
+    plt.ylabel('optimal cost')
+    plt.xlabel("Number of cities")
+    plt.title("Salesman problem using Simulated annealing algorithm")    
     plt.show()
