@@ -1,8 +1,9 @@
 import random
 import os
-file_path = 'data.txt'
+import matplotlib.pyplot as plt
+file_path = 'files/data.txt'
 def generateProduct(size):
-    with open('data.txt', 'a') as f:
+    with open('files/data.txt', 'a') as f:
         f.write(str(max_weight) + "\n")
         f.write("name, " + "weight, " + "value" + "\n")
 
@@ -17,7 +18,7 @@ def generateProduct(size):
         element6 = random.randint(97,122)
         arr = [chr(element1), chr(element2), chr(element3), chr(element4), chr(element5), chr(element6)]
         name = "".join(arr)
-        with open('data.txt', 'a') as f:
+        with open('files/data.txt', 'a') as f:
             f.write(name + "," + str(weight) + "," + str(value) + "\n" )
 
 if os.path.exists(file_path):
@@ -45,6 +46,7 @@ class HillClimbingAlgorith:
         initial_heuristic_value=0
         best_item=None 
         best_fit=[]
+        
         while self.uphill(total_weight) and self.items:
             initial_heuristic_value=0
             best_item=None
@@ -61,7 +63,9 @@ class HillClimbingAlgorith:
             total_weight+=temp_weight
             if not self.uphill(total_weight):break 
             best_fit.append(best_item)
+            
         print("\nThe Optimal solution for knapsack problems according to Hill Climbing algorithm is as follows: \n")
+        
         total_weight=0
         total_value=0
         for item,weight,value in best_fit:
@@ -70,10 +74,14 @@ class HillClimbingAlgorith:
             print(item)
         print("The total weight for the above items is : ",total_weight)
         print("The optimal value for the above items is: ",total_value)
+        return total_value,total_weight
         
 def file_reader(size):
     items=[]
-    with open("data.txt","r") as text_file:
+    item_to_weight={}
+    item_to_value={}
+    
+    with open("files/data.txt","r") as text_file:
         line_reader=text_file.readlines()
         counter=0
         max_weight=int(line_reader[0])
@@ -85,18 +93,33 @@ def file_reader(size):
                 weight=int(line_list[1])
                 value=int(line_list[2])
                 items.append((line_list[0],weight,value))
+                item_to_weight[item]=weight 
+                item_to_value[item]=value
+                
                 if counter==size:
                     return max_weight,items
                 counter+=1
             except:
                 continue
             
-    return max_weight,items
-max_weight=50
-size=int(input("Enter the items size below or equal to 20: \n"))
-max_weight,items=file_reader(size)
-instance=HillClimbingAlgorith(max_weight,items)
-instance.candidate_evaluator()
-
+    return max_weight,items 
+total_weights=[]
+total_values=[]
+for size in [10,15,20]:
+    max_weight=50
+    max_weight,items=file_reader(size)
+    instance=HillClimbingAlgorith(max_weight,items)
+    total_value,total_weight=instance.candidate_evaluator()
+    total_values.append(total_value)
+    total_weights.append(total_weight)
+# print(total_values,total_weights)    
+left = total_values
+height = [10, 15, 20]
+tick_label = ['10 items ', '15 items ', '20 items']
+plt.bar(height, left,  tick_label = tick_label,width = 0.8, color = ['red', 'green', 'yellow'])
+plt.ylabel('optimal value')
+plt.xlabel("Number of items")
+plt.title("Knapsack using hill climbing algorithm")    
+plt.show()
 
 

@@ -1,6 +1,7 @@
 import random
 import math
 import os
+import matplotlib.pyplot as plt
 def generateProduct(size,max_weight):
     with open('data.txt', 'a') as f:
         f.write(str(max_weight) + "\n")
@@ -17,15 +18,17 @@ def generateProduct(size,max_weight):
         element6 = random.randint(97,122)
         arr = [chr(element1), chr(element2), chr(element3), chr(element4), chr(element5), chr(element6)]
         name = "".join(arr)
-        with open('data.txt', 'a') as f:
+        with open('files/data.txt', 'a') as f:
             f.write(name + "," + str(weight) + "," + str(value) + "\n" )
 
-file_path="data.txt"
+file_path="files/data.txt"
 if os.path.exists(file_path):
     if os.stat(file_path).st_size == 0:
         generateProduct(20)
 else:
-    generateProduct(20)
+    size=20
+    max_weight=50
+    generateProduct(size,max_weight)
     
 
 
@@ -110,7 +113,7 @@ class SimulatedAnnealingKnapsackProblem:
         self.random_solution_geberator() #random_solution_geberator initial solution
 def file_reader(size):
     items=[]
-    with open("data.txt","r") as text_file:
+    with open("files/data.txt","r") as text_file:
         line_reader=text_file.readlines()
         counter=0
         max_weight=int(line_reader[0])
@@ -129,28 +132,40 @@ def file_reader(size):
                 continue
             
     return max_weight,items
-max_weight=50
-size=int(input("Enter the items size below or equal to 20: \n"))
-max_weight,items=file_reader(size)
-weights=[weight for item,weight,value in items]
-values=[value for item,weight,value in items] 
-best_selected = False
-instance=SimulatedAnnealingKnapsackProblem(max_weight,number_of_items=size, weights=weights,values=values)
-instance.main() 
-for _ in range(instance.time):      
-    instance.compute_the_best_solution()
-    temperature = instance.temperature*instance.annealing_rate #decrease the temprature
-    if(instance.best==295):  
-        best_selected = True 
-        break #reach the optimal solution
-        
-print('The selected items are :',list(map(bool,instance.best_solution)))
-total_value=0
-total_weight=0
-for index,is_selected in enumerate(instance.best_solution):
-    if is_selected:
-        total_weight+=weights[index]
-        total_value+=values[index]
-print(total_weight,total_value,instance.max_capacity)
-
- 
+items_sizes=[10,15,20]
+total_weights=[]
+total_values=[]
+for size in items_sizes:
+    max_weight=50
+    max_weight,items=file_reader(size)
+    weights=[weight for item,weight,value in items]
+    values=[value for item,weight,value in items] 
+    best_selected = False
+    instance=SimulatedAnnealingKnapsackProblem(max_weight,number_of_items=size, weights=weights,values=values)
+    instance.main() 
+    for _ in range(instance.time):      
+        instance.compute_the_best_solution()
+        temperature = instance.temperature*instance.annealing_rate #decrease the temprature
+        if(instance.best==295):  
+            best_selected = True 
+            break #reach the optimal solution
+            
+    print(f'\nThe  selected items among {size} items are :\n\t',list(map(bool,instance.best_solution)))
+    total_value=0
+    total_weight=0
+    for index,is_selected in enumerate(instance.best_solution):
+        if is_selected:
+            total_weight+=weights[index]
+            total_value+=values[index]
+    total_values.append(total_value)
+    total_weights.append(total_weight)
+print(total_values)
+left = total_values
+height = [10, 15, 20]
+tick_label = ['10 items ', '15 items ', '20 items']
+plt.bar(height, left,  tick_label = tick_label,
+        width = 0.8, color = ['red', 'green', 'yellow'])
+plt.ylabel('optimal value')
+plt.xlabel("Number of items")
+plt.title("Knapsack using simulated annealing algorithm")    
+plt.show()

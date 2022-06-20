@@ -21,7 +21,7 @@ class SalesmanSimulatedAnnealing:
         return distance_in_km
     def generate(self,city_size):
         cities = []
-        with open('graph.txt','r') as text_file:
+        with open('files/graph.txt','r') as text_file:
             connections=text_file.readlines()
             count=0
             for connection in connections:

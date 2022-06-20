@@ -1,8 +1,5 @@
 import random
-import copy
 import matplotlib.pyplot as plt 
-import numpy as np
-from numpy.linalg import norm
 from math import radians,sin,cos,asin,sqrt
 from hill_climbing_helper import SalesmanHillClimbing
 def distance_finder(latitude_one, longitude_one, latitude_two, longitude_two):        
@@ -71,7 +68,7 @@ def main():
     for city_size in city_sizes:    
         cities_position={}
         cities_with_their_location={}
-        with open('graph.txt','r') as text_file:
+        with open('files/graph.txt','r') as text_file:
                 connections=text_file.readlines()
                 count=0
                 for connection in connections:

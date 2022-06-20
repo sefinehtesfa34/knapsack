@@ -1,5 +1,5 @@
 import numpy as np
-from nodes_generator import NodeGenerator
+from algorithms.nodes_generator import NodeGenerator
 from simulated_annealing_tsp import SimulatedAnnealing
 
 def file_reader(size):
